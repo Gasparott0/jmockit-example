@@ -1,16 +1,34 @@
 package com.example.jmockitexample;
 
+import com.example.jmockitexample.api.UserController;
 import com.example.jmockitexample.domain.service.UserService;
+import com.example.jmockitexample.domain.service.ViacepService;
+import mockit.Expectations;
 import mockit.Mocked;
-import org.springframework.test.context.event.annotation.BeforeTestMethod;
+import mockit.Tested;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 public class UserTests {
 
-    @Mocked
-    private UserService mockedUserService;
+    @Tested
+    private UserController userController;
 
-    @BeforeTestMethod
-    public void beforeMethod() {
+    @Mocked
+    private UserService mockUserService;
+
+    @Mocked
+    ViacepService mockViacepService;
+
+    @Test
+    public void seila() {
+
+        new Expectations() {{
+            mockViacepService.loadUserAddressByCep("13186587"); result = null;
+            mockUserService.saveUser(null); result = null;
+        }};
 
     }
+
 }
