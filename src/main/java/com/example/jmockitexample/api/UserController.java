@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @Autowired
-    private ViacepService viacepService;
-
-    @Autowired
     private UserService userService;
 
     @PostMapping
@@ -30,11 +27,6 @@ public class UserController {
         user.setHouseNumber(userDTO.getHouseNumber());
         user.setComplement(userDTO.getComplement());
         user.setCep(userDTO.getCep());
-
-        AddressViacep addressViacep = viacepService.loadUserAddressByCep(userDTO.getCep());
-        user.setStreet(addressViacep.getLogradouro());
-        user.setDistrict(addressViacep.getBairro());
-        user.setLocation(addressViacep.getLocalidade());
 
         return userService.saveUser(user);
     }
