@@ -1,10 +1,8 @@
 package com.example.jmockitexample.api;
 
 import com.example.jmockitexample.api.dto.UserDTO;
-import com.example.jmockitexample.domain.model.AddressViacep;
 import com.example.jmockitexample.domain.model.User;
 import com.example.jmockitexample.domain.service.UserService;
-import com.example.jmockitexample.domain.service.ViacepService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

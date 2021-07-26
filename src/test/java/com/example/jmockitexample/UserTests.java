@@ -9,45 +9,60 @@ import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Tested;
 import mockit.Verifications;
-import org.junit.jupiter.api.BeforeAll;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 public class UserTests {
+    private AddressViacep addressViacep;
+    private User user;
 
     @Tested
     private UserService userService;
 
-    @Test
-    public void testViacepService(@Injectable ViacepService mockViacepService, @Injectable UserRepository mockUserRepository) {
+    @Injectable
+    private ViacepService mockViacepService;
 
-        var user = new User();
+    @Injectable
+    private UserRepository mockUserRepository;
+
+    @BeforeEach
+    public void init() {
+        addressViacep = loadAddressViacep();
+        user = loadUser();
 
         new Expectations() {{
-
-            mockViacepService.loadUserAddressByCep("13186587");
-            result = loadAddressViacep();
-
-            mockUserRepository.save(user);
-            result = loadUser();
-
+            mockViacepService.loadUserAddressByCep("13186587"); result = addressViacep;
+            mockUserRepository.save(user); result = user;
         }};
+    }
 
-        user.setCep("13186587");
+    @Test
+    public void testUserData() {
         var userResponse = userService.saveUser(user);
+        assertEquals("Mateus", userResponse.getName());
+    }
 
-        assertEquals("Jardim Nova Alvorada", userResponse.getDistrict());
+    @Test
+    public void testUserAddress() {
+        var userResponse = userService.saveUser(user);
+        assertEquals("Rua Andiroba", userResponse.getStreet());
+    }
 
+    @AfterEach
+    public void verify() {
         new Verifications() {{
             mockViacepService.loadUserAddressByCep("13186587");
+            mockUserRepository.save(user);
         }};
     }
 
     private AddressViacep loadAddressViacep() {
-
         var addressViacep = new AddressViacep();
         addressViacep.setCep("13186-587");
         addressViacep.setLogradouro("Rua Andiroba");
@@ -59,12 +74,10 @@ public class UserTests {
         addressViacep.setGia("7481");
         addressViacep.setDdd("19");
         addressViacep.setSiafi("2951");
-
         return addressViacep;
     }
 
     private User loadUser() {
-
         var user = new User();
         user.setId(1L);
         user.setName("Mateus");
@@ -75,8 +88,6 @@ public class UserTests {
         user.setStreet("Rua Andiroba");
         user.setDistrict("Jardim Nova Alvorada");
         user.setLocation("Hortolândia");
-
         return user;
     }
-
 }

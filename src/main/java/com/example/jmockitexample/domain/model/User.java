@@ -1,6 +1,5 @@
 package com.example.jmockitexample.domain.model;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
